@@ -1,0 +1,35 @@
+version: '3'
+services:
+  bird_1:
+    image: ehlers/bird2
+    command: 'sleep 3600'
+    restart: unless-stopped
+    volumes:
+      - ./config/bird_1:/etc/bird
+    networks:
+      bird_net:
+        ipv4_address: 172.20.1.10
+  bird_2:
+    image: ehlers/bird2
+    command: 'sleep 3600; bird'
+    restart: unless-stopped
+    volumes:
+      - ./config/bird_2:/etc/bird
+    networks:
+      bird_net:
+        ipv4_address: 172.20.1.11
+  bird_3:
+    image: ehlers/bird2
+    command: 'bird'
+    restart: unless-stopped
+    volumes:
+      - ./config/bird_3:/etc/bird
+    networks:
+      bird_net:
+        ipv4_address: 172.20.1.12
+networks:
+  bird_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.1.0/24
